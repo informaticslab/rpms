@@ -1,0 +1,48 @@
+<?php
+class database
+{
+private $connectlink;	//Database Connection Link
+private $username = "USERNAME";
+private $password = "PASSWORD";
+private $database = "rpms";
+private $hostname = "localhost";
+private $resultlink;	//Database Result Recordset link
+private $rows;		//Stores the rows for the resultset
+ 
+public function __construct() {
+	$this->connectlink = mysql_connect($this->hostname,$this->username,$this->password);
+	if(!($this->connectlink)) {
+		//throw new DatabaseConnectionException("Error Connecting to the Database".mysql_error(),"101");
+	}
+	else {
+		mysql_select_db($this->database);
+	}
+}
+ 
+public function __destruct() {
+	@mysql_close($this->connectlink);
+}
+ 
+public function query($sql) {
+	$this->resultlink = mysql_query($sql);
+	return $this->resultlink;
+}
+ 
+public function fetch_rows($result) {
+	$rows = array();
+	if($result) {
+		while($row = mysql_fetch_array($result)) {
+			$rows[] = $row;
+		}
+	}
+	else {
+		//throw new RetrieveRecordsException("Error Retrieving Records".mysql_error(),"102");
+		$rows = null;
+	}
+	return $rows;
+}
+}
+ 
+$db = new database();	//Create database object
+ 
+?>
