@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>RPMS Administration Summary</title>
+
+<link type="text/css" href="../styles/summary.css" rel="stylesheet" />
+
+<!-- <script type="text/javascript" src="scripts/main.js"></script> -->
+
+<!--[if lt IE 9]>
+	<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
+
+</head>
+<body>
+
+<section class="leftnav">
+	<img src="../images/brandingsm.jpg" width="300" height="81" title="Informatics R&D Laboratory" alt="Informatics R&D Laboratory" />
+	<div class="content">
+		<h1>Research Project <br>Management System</h1>
+		
+		<hr class="small"/>
+		
+		<div>Results Page 
+			<a href="#">Previous</a> | 
+			1<?php echo $resultsPageNum; ?> | 
+			<a href="#">Next</a>
+		</div>
+		
+		<div class="summary">
+			<ul>
+				<li>Total Projects:&nbsp;150<?php echo $total; ?></li>
+				<li>Active Projects:&nbsp;10<?php echo $active; ?></li>
+			</ul>
+			
+			<h2>Engagement Types</h2>
+			<ul>
+				<li>Internal:&nbsp;4<?php echo $internal; ?></li>
+				<li>External:&nbsp;4<?php echo $external; ?></li>
+				<li>Collaborative:&nbsp;2<?php echo $collaborative; ?></li>
+			</ul>
+			
+			<h2>Administration Status</h2>
+			<ul>
+				<li>Under Review:&nbsp;2<?php echo $underReview; ?></li>
+				<li>Approved:&nbsp;8<?php echo $approved; ?></li>
+				<li>Discontinued:&nbsp;4<?php echo $retired; ?></li>
+				<li>Other:&nbsp;2<?php echo $otherAdmin; ?></li>
+			</ul>
+			
+			<h2>Infrastructure Status</h2>
+			<ul>
+				<li>To Set Up:&nbsp;1<?php echo $toSetUp; ?></li>
+				<li>Ready:&nbsp;5<?php echo $ready; ?></li>
+				<li>To&nbsp;Take&nbsp;Down:&nbsp;2<?php echo $toTakeDown; ?></li>
+				<li>Other:&nbsp;2<?php echo $otherTech; ?></li>
+			</ul>
+		</div>
+		
+		<menu>
+			<a href="#">Delete</a> | 
+			<a href="#">Email</a> | 
+			<a href="#">Copy</a>
+			&nbsp; &nbsp;Checked Engagements
+		</menu>
+	</div>
+	
+	<div class="searchbox">
+		<form action="business-admin.php" method="get">
+	        <input type="hidden" name="search" value="yes">
+	      	<input type="text" name="keyword" value="" class="search" placeholder="Search Engagements" alt="Search" title="Search" autocomplete="on">
+			<input type="button" class="searchButton" value="Search">
+			
+			<section>Search from date
+			<br/><input type="text" name="searchFrom" id="datepicker1" value="" class="hasDatepicker">
+			<img src="../images/calendarIcon.png" width="20" height="18" alt="">
+			</section>
+			<section>Search to date
+			<br/><input type="text" name="searchTo" id="datepicker1" value="" class="hasDatepicker">
+			<img src="../images/calendarIcon.png" width="20" height="18" alt="">
+			</section>
+			
+		</form>
+	</div>
+	 
+	
+	<nav>
+		<a href="#">New Project</a> | 
+		<span class="selected">Administration</span> | 
+		<a href="#">Reports</a>
+	</nav>
+</section>
+
+<section class="data">
+	<table>
+	
+		<tr>
+			<th>ID</th>
+			<th>Start&nbsp;Date</th>
+			<th colspan="4">Title</th>
+			<th>Engagement</th>
+			<th>Admin&nbsp;Status</th>
+			<th><a href="#" onclick="add">Check&nbsp;All</a></th>
+		</tr>
+		<tr>
+			<th>Organization</th>
+			<th>End&nbsp;Date</th>
+			<th>VM</th>
+			<th>Physical</th>
+			<th>Online</th>
+			<th>Other</th>
+			<th>Primary&nbsp;Contact</th>
+			<th>Infrastructure</th>
+			<th>&nbsp;</th>
+		</tr>
+		<tr><td colspan="9"><hr class="red"></td></tr>
+
+<?php //start looping through the records ?>
+		<tr>
+			<td>56</td>
+			<td>June&nbsp;3,&nbsp;2010</td>
+			<td colspan="4">Health Statistics Web Presentation System (IBIS) Prototype</td>
+			<td>Internal</td>
+			<td>Approved</td>
+			<td><input type="checkbox" name="actionBox"></td>
+		</tr>
+		<tr>
+			<td>CGH / GPHIP</td>
+			<td>July&nbsp;1,&nbsp;2010</td>
+			<td>VM:3</td>
+			<td>Device:1</td>
+			<td>Online:2</td>
+			<td>Other:0</td>
+			<td>Johnny Smith</td>
+			<td>Ready</td>
+			<td>&nbsp;</td>
+		</tr>
+		<tr><td colspan="9"><hr></td></tr>
+		<tr>
+			<td>56</td>
+			<td>June 3, 2010</td>
+			<td colspan="4">Health Statistics Web Presentation System</td>
+			<td>Internal</td>
+			<td>Approved</td>
+			<td><input type="checkbox" name="actionBox"></td>
+		</tr>
+		<tr>
+			<td>CGH / GPHIP</td>
+			<td>July 1, 2010</td>
+			<td>VM:3</td>
+			<td>Device:1</td>
+			<td>Online:2</td>
+			<td>Other:0</td>
+			<td>Johnny Smith</td>
+			<td>Ready</td>
+			<td>&nbsp;</td>
+		</tr>
+		<tr><td colspan="9"><hr></td></tr>
+		<tr>
+			<td>56</td>
+			<td>June 3, 2010</td>
+			<td colspan="4">Health Statistics Web Presentation System (IBIS) Prototype Health Statistics Web Presentation System Prototype</td>
+			<td>Collaborative</td>
+			<td>Approved</td>
+			<td><input type="checkbox" name="actionBox"></td>
+		</tr>
+		<tr>
+			<td>CGH / DPHSWD</td>
+			<td>July 1, 2010</td>
+			<td>VM:3</td>
+			<td>Device:1</td>
+			<td>Online:2</td>
+			<td>Other:0</td>
+			<td>Johnny Smith</td>
+			<td>Ready</td>
+			<td>&nbsp;</td>
+		</tr>
+		<tr><td colspan="9"><hr></td></tr>
+		<tr>
+			<td>56</td>
+			<td>June 3, 2010</td>
+			<td colspan="4">Health Statistics Web Presentation System (IBIS) Prototype</td>
+			<td>Internal</td>
+			<td>Approved</td>
+			<td><input type="checkbox" name="actionBox"></td>
+		</tr>
+		<tr>
+			<td>CGH / GPHIP</td>
+			<td>July 1, 2010</td>
+			<td>VM:3</td>
+			<td>Device:1</td>
+			<td>Online:2</td>
+			<td>Other:0</td>
+			<td>Johnny Smith</td>
+			<td>Ready</td>
+			<td>&nbsp;</td>
+		</tr>
+		<tr><td colspan="9"><hr></td></tr>
+		<tr>
+			<td>56</td>
+			<td>June 3, 2010</td>
+			<td colspan="4">Health Statistics Web Presentation System (IBIS) Prototype</td>
+			<td>Internal</td>
+			<td>Approved</td>
+			<td><input type="checkbox" name="actionBox"></td>
+		</tr>
+		<tr>
+			<td>CGH / GPHIP</td>
+			<td>July 1, 2010</td>
+			<td>VM:3</td>
+			<td>Device:1</td>
+			<td>Online:2</td>
+			<td>Other:0</td>
+			<td>Johnny Smith</td>
+			<td>Ready</td>
+			<td>&nbsp;</td>
+		</tr>
+		<tr><td colspan="9"><hr></td></tr>
+		<tr>
+			<td>56</td>
+			<td>June 3, 2010</td>
+			<td colspan="4">Health Statistics Web Presentation System</td>
+			<td>Internal</td>
+			<td>Approved</td>
+			<td><input type="checkbox" name="actionBox"></td>
+		</tr>
+		<tr>
+			<td>CGH / DPHSWD / GPHIP</td>
+			<td>July 1, 2010</td>
+			<td>VM:3</td>
+			<td>Device:1</td>
+			<td>Online:2</td>
+			<td>Other:0</td>
+			<td>Johnny Smith</td>
+			<td>Ready</td>
+			<td>&nbsp;</td>
+		</tr>
+		<tr><td colspan="9"><hr></td></tr>
+		<tr>
+			<td>56</td>
+			<td>June 3, 2010</td>
+			<td colspan="4">Health Statistics Web Presentation System Prototype</td>
+			<td>Internal</td>
+			<td>Approved</td>
+			<td><input type="checkbox" name="actionBox"></td>
+		</tr>
+		<tr>
+			<td>CGH / GPHIP</td>
+			<td>July 1, 2010</td>
+			<td>VM:3</td>
+			<td>Device:1</td>
+			<td>Online:2</td>
+			<td>Other:0</td>
+			<td>Johnny Smith</td>
+			<td>Ready</td>
+			<td>&nbsp;</td>
+		</tr>
+		<tr><td colspan="9"><hr></td></tr>
+		<tr>
+			<td>56</td>
+			<td>June 3, 2010</td>
+			<td colspan="4">Health Statistics Web Presentation System (IBIS) Prototype</td>
+			<td>Internal</td>
+			<td>Approved</td>
+			<td><input type="checkbox" name="actionBox"></td>
+		</tr>
+		<tr>
+			<td>CGH / GPHIP</td>
+			<td>July 1, 2010</td>
+			<td>VM:3</td>
+			<td>Device:1</td>
+			<td>Online:2</td>
+			<td>Other:0</td>
+			<td>Johnny Smith</td>
+			<td>Ready</td>
+			<td>&nbsp;</td>
+		</tr>
+		<tr><td colspan="9"><hr></td></tr>
+		<tr>
+			<td>56</td>
+			<td>June 3, 2010</td>
+			<td colspan="4">Health Statistics Web Presentation</td>
+			<td>Internal</td>
+			<td>Approved</td>
+			<td><input type="checkbox" name="actionBox"></td>
+		</tr>
+		<tr>
+			<td>CGH / GPHIP</td>
+			<td>July 1, 2010</td>
+			<td>VM:3</td>
+			<td>Device:1</td>
+			<td>Online:2</td>
+			<td>Other:0</td>
+			<td>Johnny Smith</td>
+			<td>Ready</td>
+			<td>&nbsp;</td>
+		</tr>
+		<tr><td colspan="9"><hr></td></tr>
+		<tr>
+			<td>56</td>
+			<td>June 3, 2010</td>
+			<td colspan="4">Health Statistics Web Presentation System (IBIS) Prototype</td>
+			<td>Internal</td>
+			<td>Approved</td>
+			<td><input type="checkbox" name="actionBox"></td>
+		</tr>
+		<tr>
+			<td>CGH / GPHIP</td>
+			<td>July 1, 2010</td>
+			<td>VM:3</td>
+			<td>Device:1</td>
+			<td>Online:2</td>
+			<td>Other:0</td>
+			<td>Johnny Smithillopogus</td>
+			<td>Ready</td>
+			<td>&nbsp;</td>
+		</tr>
+		<tr><td colspan="9"><hr></td></tr>
+		<tr>
+			<td>56</td>
+			<td>June 3, 2010</td>
+			<td colspan="4">Health Statistics Web Presentation System Prototype</td>
+			<td>Internal</td>
+			<td>Approved</td>
+			<td><input type="checkbox" name="actionBox"></td>
+		</tr>
+		<tr>
+			<td>CGH / GPHIP</td>
+			<td>July 1, 2010</td>
+			<td>VM:3</td>
+			<td>Device:1</td>
+			<td>Online:2</td>
+			<td>Other:0</td>
+			<td>Johnny Smith</td>
+			<td>Ready</td>
+			<td>&nbsp;</td>
+		</tr>
+		<tr><td colspan="9"><hr class="red"></td></tr>
+<?php //end looping through the records ?>
+	
+	</table>
+</section>
+
+</body>
+</html>
