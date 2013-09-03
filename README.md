@@ -1,6 +1,6 @@
 # PHIResearchLab.org Research Project Management System (RPMS)
 
-Simple, quick PHP tool developed to track engagement activity within the Lab. Development has been dormant for over a year due to lack of resources.
+Simple, quick PHP tool developed to track engagement activity within the Lab. Development for v2.0 has started. In this version, we plan to update and enhance the tool's scope and functionality. We are looking at and re-working every portion of the application from database architecture to online look and feel.
 
 ## Goals
 To provide transparency for our project management tool used to track R&D Lab engagements.
@@ -11,7 +11,8 @@ To develop and share the source used to power PHIResearchLab.org.dd
 * PHP 5.3.x
 
 ## Roadmap
-*Steady state, no revisions planned.
+* v2.0 Basic/current functionality with new structure in place.
+* v2.1 Enhancements to the product, details TBD.
 
 ## Contributing
 Anyone is encouraged to contribute to the project by [forking](https://help.github.com/articles/fork-a-repo) and submitting a pull request. (If you are new to GitHub, you might start with a [basic tutorial](https://help.github.com/articles/set-up-git).) 
