@@ -40,26 +40,33 @@ h1, h2 { color:#bb1d03; font-weight:bold; }
 h1 { font-size:16px; line-height:25px; text-align:right; }
 h2 { font-size:12px; }
 
+.disabled { color:#888; }
+
 /* layout */
 .leftnav { padding:0px; width:300px; height:auto; 
 	border: 1px solid #aaa9a9;
 	border-radius:5px; -webkit-border-radius:5px; -moz-border-radius:5px; -khtml-border-radius:5px;
 	-moz-box-shadow: 2px 2px 3px #c2c2c2; -webkit-box-shadow: 2px 2px 3px #c2c2c2; box-shadow: 2px 2px 3px #c2c2c2;
-	background-color:#FEFBFB; 
+	background-color:#e7e7e7; 
 	background: linear-gradient(#e7e7e7, #fff);
 	background:-webkit-linear-gradient(#e7e7e7, #fff);
 	background:-webkit-gradient(linear, 0 200, 0 400, from(#e7e7e7), to(#fff)); 
 	background:-moz-linear-gradient(to bottom, #e7e7e7 10%, #fff);
 	background:-o-linear-gradient(#e7e7e7, #fff);
-	background:-ms-linear-gradient(#e7e7e7, #fff);
-	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#e7e7e7', endColorstr='#fff');
+	background:-ms-linear-gradient(top, #e7e7e7, #ffffff);
+	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#e7e7e7', endColorstr='#ffffff', gradientType='0');
 }
 
 .leftnav img {  }
 .leftnav .content { padding-left:15px; padding-right:15px; }
 .leftnav .summary { margin:40px 0px 60px 0px; font-size:12px; }
 .leftnav ul, .leftnav li { display:inline; margin:0px; padding:0px 10px 0px 0px; }
+
 .leftnav menu { margin-bottom:20px; }
+.leftnav nav { margin:10px 0px; text-align:center; width:98%; }
+.leftnav nav span, .leftnav nav a, .leftnav menu a { padding:0px 6px; border-left:1px solid #000; }
+.leftnav nav :first-child, .leftnav menu :first-child { border:none; }
+
 
 .leftnav .searchbox { width:100%; background-color:#f6b018; }
 .leftnav .searchbox input.search { width:175px; padding-left:5px; margin:15px 10px 10px 10px; }
@@ -92,8 +99,6 @@ h2 { font-size:12px; }
 .leftnav .searchbox section { display:inline-block; padding:10px; }
 .leftnav .searchbox input.hasDatepicker { width:95px; }
 .leftnav .searchbox img { padding-bottom:5px; vertical-align:middle; }
-
-.leftnav nav { margin:10px 0px; text-align:center; width:100%; }
 
 .data { position:absolute; top:0px; left:305px; }
 .data table { padding:20px; width:100%-305px; font-size:12px; }

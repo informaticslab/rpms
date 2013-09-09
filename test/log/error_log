@@ -1,0 +1,27 @@
+[Sun Aug 18 04:02:02 2013] [notice] Digest: generating secret for digest authentication ...
+[Sun Aug 18 04:02:02 2013] [notice] Digest: done
+[Sun Aug 18 04:02:02 2013] [notice] mod_python: Creating 4 session mutexes based on 256 max processes and 0 max threads.
+[Sun Aug 18 04:02:02 2013] [notice] SSL FIPS mode disabled
+[Sun Aug 18 04:02:02 2013] [notice] Apache/2.2.3 (CentOS) configured -- resuming normal operations
+sh: rpmsold.sql: Permission denied
+[Tue Aug 20 11:24:23 2013] [error] [client 172.16.4.100] PHP Parse error:  syntax error, unexpected T_VARIABLE in /var/www/html/rpms2/test/dumpSql.php on line 21
+[Tue Aug 20 11:25:56 2013] [error] [client 172.16.4.100] PHP Parse error:  syntax error, unexpected T_VARIABLE in /var/www/html/rpms2/test/dumpSql.php on line 21
+[Tue Aug 20 11:26:14 2013] [error] [client 172.16.4.100] PHP Parse error:  syntax error, unexpected T_VARIABLE in /var/www/html/rpms2/test/dumpSql.php on line 21
+[Tue Aug 20 11:26:16 2013] [error] [client 172.16.4.100] PHP Parse error:  syntax error, unexpected T_VARIABLE in /var/www/html/rpms2/test/dumpSql.php on line 21
+[Tue Aug 20 11:26:53 2013] [error] [client 172.16.4.100] PHP Parse error:  syntax error, unexpected T_VARIABLE in /var/www/html/rpms2/test/dumpSql.php on line 21
+[Tue Aug 20 11:27:23 2013] [error] [client 172.16.4.100] PHP Parse error:  syntax error, unexpected T_VARIABLE in /var/www/html/rpms2/test/dumpSql.php on line 21
+[Tue Aug 20 11:27:36 2013] [error] [client 172.16.4.100] PHP Parse error:  syntax error, unexpected T_VARIABLE in /var/www/html/rpms2/test/dumpSql.php on line 21
+[Tue Aug 20 11:28:48 2013] [error] [client 172.16.4.100] PHP Parse error:  syntax error, unexpected T_VARIABLE in /var/www/html/rpms2/test/dumpSql.php on line 21
+[Tue Aug 20 11:29:18 2013] [error] [client 172.16.4.100] PHP Parse error:  syntax error, unexpected T_VARIABLE in /var/www/html/rpms2/test/dumpSql.php on line 21
+sh: rpmsold2.sql: Permission denied
+sh: rpmsold2.sql: Permission denied
+sh: rpmsold.sql: Permission denied
+[Tue Aug 20 11:30:24 2013] [error] [client 172.16.4.100] PHP Notice:  Undefined variable: outputArray in /var/www/html/rpms2/test/dumpSql.php on line 21
+[Tue Aug 20 11:37:35 2013] [error] [client 172.16.4.100] File does not exist: /var/www/html/html
+sh: rpmsold.sql: Permission denied
+[Tue Aug 20 11:41:45 2013] [error] [client 172.16.4.100] PHP Notice:  Undefined variable: outputArray in /var/www/html/rpms2/test/dumpSql.php on line 21
+sh: rpmsold3.sql: Permission denied
+sh: rpmsold3.sql: Permission denied
+sh: rpmsold.sql: Permission denied
+[Tue Aug 20 11:42:58 2013] [error] [client 172.16.4.100] PHP Notice:  Undefined variable: outputArray in /var/www/html/rpms2/test/dumpSql.php on line 21
+sh: rpms.sql: command not found

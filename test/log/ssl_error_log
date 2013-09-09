@@ -1,0 +1,2 @@
+[Sun Aug 18 04:02:02 2013] [warn] RSA server certificate is a CA certificate (BasicConstraints: CA == TRUE !?)
+[Sun Aug 18 04:02:02 2013] [warn] RSA server certificate CommonName (CN) `localhost.localdomain' does NOT match server name!?

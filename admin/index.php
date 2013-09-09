@@ -1,163 +1,113 @@
-<?php
-    include '../includes/db.php';
-	if(!isset($_POST['op'])){ $_POST['op'] = "undefined";}
-    $op = $_POST["op"];
-?>
+<?php 
+/* This is the administration area for the online php application for RPMS, IRDA, CDC.
+This is the functional controller or main page, it loads globals (re-usable functionality) 
+and templates (re-usable layout).
 
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
-    "http://www.w3.org/TR/html4/strict.dtd"
-    >
-<html lang="en">
-<head>
-    <title>IRDU Projects</title>
-    <meta http-equiv="content-type" content="text/html; charset=us-ascii" />
-    <link rel="stylesheet" href="http://<?php  echo $_SERVER['SERVER_NAME']; ?>/rpms/css/style.css" type="text/css" media="all" />
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js" type="text/javascript"></script>
-    <script src="http://<?php  echo $_SERVER['SERVER_NAME']; ?>/rpms/js/jquery.tablesorter.min.js" type="text/javascript"></script>
- <script type="text/javascript">
+Table of contents
+	get global data
+	(Change these for personalization)
+	set this page vars
+	query the db
+	pagination
+	get html template
+*/
+/* insert some test data into the db
+INSERT INTO `project_main` (id,start_date,end_date,project_title,organization,project_use,admin_selection,infra_selection) VALUES (23,'2010-08-10','2010-10-15','Health Statistics Web Presentation System (IBIS) Health Statistics Web Presentation','CGH / DPHSWD / GPHIP','Internal','Approved','Ready');
+*/
 
-$(document).ready(function() 
-    { 
-        $("#myTable").tablesorter(); 
-    } 
-); 
-</script>
-</head>
+/* get global data */
+require('../includes/global.php');
 
-<body class="admin">
-<?php            
-    switch ($op){
-    case "Delete":
+/* (Change these for personalization) */
+$pageData->title = 'RPMS Administration Summary';
+$pageData->navSelected = 'Administration';
+$pageData->pageName = 'index.php';
+$pageData->numPerPage = '20';
 
-            $ids = $_POST['id'];
-            foreach($ids as $id){
-             $db->query("DELETE ai_status, ap_status, connectivity, resources, summary, desktop, server, outcome, project from project
-                    JOIN project_summary as summary on project.id = summary.projectid
-                    JOIN project_resources as resources on project.id = resources.projectid
-                    JOIN tr_desktop as desktop on project.id = desktop.projectid
-                    JOIN tr_server as server on project.id = server.projectid
-                    JOIN connectivity as connectivity on project.id = connectivity.projectid
-                    JOIN project_output as outcome on project.id = outcome.projectid
-                    JOIN admin_project_status as ap_status on project.id = ap_status.projectid
-                    JOIN admin_infrastructure_status as ai_status on project.id = ai_status.projectid
-                    where project.id=$id"); 
-            }
-        header("Location: http://".$_SERVER['SERVER_NAME']."/rpms/admin/index.php");
-        break;
-    default:
-?>
-<div class="aligncenter" style="font-size:18px;padding-top:15px;">RESEARCH PROJECT MANAGEMENT SYSTEM<a href="feed"> <img valign="middle" src="../img/rss_icon.png" alt="RSS Feed" border="0"></a></div><div class="alignleft"><a href="../">New Project</a></div>
-<form method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>">
-    <table border=0 cellspacing=1 cellpadding=1 align="center" width="80%" id="myTable">
-        <thead><tr align="center">
-		<th class="adminheader">ID</th>
-		<th class="adminheader" style="width:5%">Organization</th>
-		<th class="adminheader">Start</th>
-		<th class="adminheader">End</th>
-		<th class="adminheader" style="width:50%">Title</th>
-		<th class="adminheader">Status</th>
-		<th class="adminheader">Infrastructure</th>
-		<th class="adminheader">Engagement</th>
-		<th class="adminheader">Del</th>
-	</tr></thead>
-            <tbody>
-            <?php
-                $results = $db->query("SELECT project.start_date,project.end_date,project.id, title, project_status, infrastructure_status, project_type, project_use,organization,users.email from project
-                                       JOIN users on project.userid = users.id
-                                       JOIN admin_project_status on project.id = admin_project_status.projectid and admin_project_status.id = (select max(id) from admin_project_status where projectid = project.id)
-                                       JOIN admin_infrastructure_status on project.id = admin_infrastructure_status.projectid and admin_infrastructure_status.id = (select max(id) from admin_infrastructure_status where projectid = project.id)");
-                if(!$results){ echo 'fail';}
-		$underReview =0;
-		$approved = 0;
-		$completed = 0;
-		$countCollaborative=0;
-		$countInternal=0;
-		$countExternal=0;
-		$countHybrid=0;
-		$countPrototype=0;
-		$countEvaluation=0;
 
-		$rowNumber=0;
 
-		$emailAlertList='';
-		
-                while($row = mysql_fetch_assoc($results)){
-		if ($row['project_status'] == 'Under Review'){
-			$underReview++;
-		}elseif ($row['project_status'] == 'Approved'){
-			$approved++;
-			//I want to track all the projects that are approved and ready|modify so we can email blast them
-			if ($row['infrastructure_status'] == 'Ready' || $row['infrastructure_status'] == 'Modifying'){
-				$emailAlertList = $emailAlertList.$row['email'].";";
-			}
-		}elseif ($row['project_status'] == 'Completed'){
-			$completed++;
-		}
-		if($row['project_type']=='Evaluation'){$countEvaluation++;}
-		elseif($row['project_type']=='Prototype'){$countPrototype++;}
-		elseif($row['project_type']=='Hybrid'){$countHybrid++;}
+/* set this page vars */
 
-		if($row['project_use']=='Collaborative'){$countCollaborative++;}
-		elseif($row['project_use']=='Internal'){$countInternal++;}
-		elseif($row['project_use']=='External'){$countExternal++;}
-    		
-		if ($rowNumber++%2 == 0){
-			$rowColor="#f6f1e0";
-			$alternateRowCOlor="#efefef";
-		}else{
-			$rowColor="#efefef";
-			$alternateRowColor="#f6f1e0";
-		}
-//alternate color could be frog green: e3f377
-            ?>
-            <tr align="center" style="background-color: <?php echo $rowColor; ?>;" onclick="document.location.href='actions.php?id=<?php echo  $row['id'];?>';" onmouseover="this.style.backgroundColor='#a1de77';" onmouseout="this.style.backgroundColor='<?php echo $rowColor;?>';">
-                <td style="width:5%;"><?php echo $row['id']; ?></td>
-                <td><?php echo $row['organization']; ?></td>
-                <td><?php if ($row['start_date'] > 0){echo date("Y.m.d",$row['start_date']);} ?></td>
-                <td><?php if ($row['end_date'] > 0){echo date("Y.m.d",$row['end_date']);} ?></td>
-                <td><?php echo $row['title']; ?></td>
-                <td><?php echo $row['project_status']; ?></td>
-                <td><?php echo $row['infrastructure_status']; ?></td>
-		<td><?php echo $row['project_use']; ?></td>
-<!--                <td style="width:5%;"><a href="actions.php?id=<?php echo $row['id']; ?>"><img src="../img/pencil_24.png" border="0"></a></td>-->
-                <td style="width:5%;" onclick="event.stopPropagation();"><input type="checkbox" name="id[]" value="<?php echo $row['id']; ?>"></td>
-            </tr>
-    
-            <?php
-                }//end while
-        
-            ?>
+// create form data object and sanitize
+$formVars = new security;
 
-		<tr align="left" style="background-color: #f6f1e0;font-weight:bold;">
-			<td>&nbsp;</td>
-			<td colspan="9">
-				<?php echo("Total Projects: ".mysql_num_rows($results)."; Active Projects: ".(mysql_num_rows($results) - $completed)."<br>Under Review:".$underReview."; Approved:".$approved."; Completed/Retired:".$completed."; Other: ".(mysql_num_rows($results) - $approved - $underReview - $completed)); ?>
-<!--<br>
-<?php echo ("Project Types: Prototype: ".$countPrototype."; Evaluation: ".$countEvaluation."; Hybrid: ".$countHybrid);?>
--->
-<br>
-<?php echo ("Engagement Types: Internal: ".$countInternal."; External: ".$countExternal."; Collaborative:".$countCollaborative);?>
-			</td>
-		</tr>
-    
-            </tbody>
-    </table>
 
-<?php
-$emailAlertList = '';
+// defaults for ordering NEEDS MORE WORK 
+if (!isset($orderBy)) { $orderBy = 'approved_start'; }
 
-$results = $db->query("SELECT DISTINCT CONCAT('''',fname,' ',lname,'''<',email,'>') as email from users JOIN project ON users.id = project.userid JOIN admin_project_status on project.id = admin_project_status.projectid and admin_project_status.id = (select max(id) from admin_project_status where projectid = project.id) JOIN admin_infrastructure_status on project.id = admin_infrastructure_status.projectid and admin_infrastructure_status.id = (select max(id) from admin_infrastructure_status where projectid = project.id) WHERE email != '' AND admin_project_status.project_status = 'Approved' AND admin_infrastructure_status.infrastructure_status in ('Ready','Modifying')");
-
-while($row = mysql_fetch_assoc($results)){
-	$emailAlertList = $emailAlertList.$row['email'].";";
+// loop through all db vars: if id or first... then obj thisVar = ASC. FOR ORDERING LINKS, THIS MUST BE COMPLETED
+if (!isset($orderType)) {
+	$orderType = 'DESC'; 
 }
-?>    
-            <div style="float: right; padding-top: 10px; padding-right: 200px;"><input type="submit" name="op" value="Delete">
-<a href="mailto:<?php echo $emailAlertList;?>">Email Alert</a>
-</div>
-</form>
-        <?php
-            }//end switch
-        ?>
-</body>
-</html>
+
+
+/* query the db */
+
+// query the db for stats/summary. NEED TO ADD EXCLUSIONS WHEN SEARCHING
+$queryStats = 'SELECT COUNT(admin_selection) FROM project_main WHERE admin_selection!="Closed" LIMIT 0,10;';
+$resultStats = $mysqli->query($queryStats);
+$obj = $resultStats->fetch_object();
+$countCol = 'COUNT(admin_selection)';
+$pageData->active=$obj->$countCol;
+
+$queryStats = 'SELECT project_use, COUNT(project_use) FROM project_main GROUP BY project_use LIMIT 0,10;';
+$resultStats = $mysqli->query($queryStats);
+if ($resultStats==false) {  
+    error_log('Error in admin/index: the db query failed: query the db for stats/summary \n', 3, "/xampp/tmp/my-errors.log");
+	echo 'Error in select count result <br />';
+}
+else {
+	// IT WOULD BE BETTER: 
+	// to loop through isset to auto create the var by $$obj->project_use=$obj->$countCol; else (not set) $$obj->project_use=0;
+	while ( $obj = $resultStats->fetch_object() ) { 
+		$countCol = 'COUNT(project_use)';
+		if ($obj->project_use=='Internal') { $pageData->internal=$obj->$countCol; }
+		elseif ($obj->project_use=='External') { $pageData->external=$obj->$countCol; }
+		elseif ($obj->project_use=='Collaborative') { $pageData->collaborative=$obj->$countCol; }
+	}
+}
+/* SAMPLES
+$result = mysql_query("SELECT COUNT(*) FROM News");
+$row = mysql_fetch_assoc($result);
+$size = $row['COUNT(*)'];
+	SELECT COUNT(CustomerID) AS tempTableName FROM Orders WHERE CustomerID=7;
+	$query = "SELECT type, COUNT(name) FROM products GROUP BY type"; 
+	$result = mysql_query($query) or die(mysql_error());
+	
+	// Print out result
+	while($row = mysql_fetch_array($result)){
+		echo "There are ". $row['COUNT(name)'] ." ". $row['type'] ." items.";
+		echo "<br />";
+	}
+*/
+
+
+// query the db for the records. NEED TO ADD EXCLUSIONS WHEN SEARCHING
+$queryData = 'SELECT id,project_title,approved_start,approved_end,project_use,admin_selection,infra_selection,totalVM,totalPhysical,totalOnline,totalOther FROM project_main ORDER BY '.$orderBy.' '.$orderType.' LIMIT 0,1000;';
+$resultData = $mysqli->query($queryData);
+if ($resultData==false) {  
+    error_log('Error in admin/index: the db query failed: query the db for the records \n', 3, "/tmp/my-errors.log");
+}
+
+// query the db for the primary contact info
+// I need to pull the primary's record data from table personnel
+// pull rest of data separate based on obj->id, or use a join to pull all at once? 
+// should I loop through the queryData to get all the ids?
+// JOIN [users on project.userid = users.id] ?
+// table personnel, field primary_contact == 'y'
+
+
+/* pagination */
+$pages = new pages;
+$pages->pagination($resultData, $pageData);
+$pages->pageLinks($pageData);
+
+
+/* get html template */
+
+require('../templates/admin-template.php');
+
+
+// close db connection
+if (isset($mysqli)) { $mysqli->close(); }
+?>
