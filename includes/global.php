@@ -11,10 +11,13 @@ Table of Contents
 /* Set variables */
 
 // set secure vars
-$sqlServer = "localhost";
-$username = "rpms";
-$password = "Budde373";
-$database = "rpms";
+require(secure.php);
+/* The above file should have these lines inside php tags
+$sqlServer = "[location/localhost]";
+$username = "[user]";
+$password = "[pass]";
+$database = "[databaseName]";
+*/
 
 // global vars
 $datestamp = date('Y-m-d'); // SQL YYYY-MM-DD HH:MM:SS
