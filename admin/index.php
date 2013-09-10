@@ -5,40 +5,54 @@ and templates (re-usable layout).
 
 Table of contents
 	get global data
-	(Change these for personalization)
-	set this page vars
+	Change these for personalization
+	process form data
 	query the db
 	pagination
 	get html template
 */
 /* insert some test data into the db
-INSERT INTO `project_main` (id,start_date,end_date,project_title,organization,project_use,admin_selection,infra_selection) VALUES (23,'2010-08-10','2010-10-15','Health Statistics Web Presentation System (IBIS) Health Statistics Web Presentation','CGH / DPHSWD / GPHIP','Internal','Approved','Ready');
+INSERT INTO `project_main` (id,start_date,end_date,project_title,project_use,admin_selection,infra_selection) VALUES (23,'2010-08-10','2010-10-15','Health Statistics Web Presentation System (IBIS) Health Statistics Web Presentation','Internal','Approved','Ready');
+INSERT INTO `personnel` (projectid,first_name,last_name,organization,primary_contact) VALUES (60,'David','McNalley','CGH / CDC',1);
 */
 
 /* get global data */
 require('../includes/global.php');
 
-/* (Change these for personalization) */
+/* Change these for personalization */
 $pageData->title = 'RPMS Administration Summary';
 $pageData->navSelected = 'Administration';
 $pageData->pageName = 'index.php';
-$pageData->numPerPage = '20';
+$pageData->numPerPage = '1000';
+
+// default summary engagement order
+$orderBy = 'approved_start';
+// this can only be 'ASC' or 'DESC'
+$orderType = 'DESC';
+
+// Default orderType for each sort field/column. NEED THIS TO FLIP WHEN LINK CHECKED SECOND TIME. maybe have it switch the data after it makes the db call.
+$order->id = 'ASC';
+$order->approved_start = 'DESC';
+$order->project_title = 'ASC';
+$order->project_use = 'ASC';
+$order->admin_selection = 'ASC';
+$order->organization = 'ASC';
+$order->approved_end = 'DESC';
+$order->infra_selection = 'ASC';
 
 
 
-/* set this page vars */
 
-// create form data object and sanitize
-$formVars = new security;
+/*** change below for functionality ***/
 
+/* process form data */
 
-// defaults for ordering NEEDS MORE WORK 
-if (!isset($orderBy)) { $orderBy = 'approved_start'; }
+$formVars = new formVars;
+$formVars->orderBy = $orderBy;
+$formVars->orderType = $orderType;
+$formVars->sanitizeForm($formVars);
 
-// loop through all db vars: if id or first... then obj thisVar = ASC. FOR ORDERING LINKS, THIS MUST BE COMPLETED
-if (!isset($orderType)) {
-	$orderType = 'DESC'; 
-}
+// http://localhost/rpms2/admin/index.php?orderBy=id&orderType=ASC
 
 
 /* query the db */
@@ -50,61 +64,58 @@ $obj = $resultStats->fetch_object();
 $countCol = 'COUNT(admin_selection)';
 $pageData->active=$obj->$countCol;
 
-$queryStats = 'SELECT project_use, COUNT(project_use) FROM project_main GROUP BY project_use LIMIT 0,10;';
-$resultStats = $mysqli->query($queryStats);
-if ($resultStats==false) {  
-    error_log('Error in admin/index: the db query failed: query the db for stats/summary \n', 3, "/xampp/tmp/my-errors.log");
-	echo 'Error in select count result <br />';
-}
-else {
-	// IT WOULD BE BETTER: 
-	// to loop through isset to auto create the var by $$obj->project_use=$obj->$countCol; else (not set) $$obj->project_use=0;
-	while ( $obj = $resultStats->fetch_object() ) { 
-		$countCol = 'COUNT(project_use)';
-		if ($obj->project_use=='Internal') { $pageData->internal=$obj->$countCol; }
-		elseif ($obj->project_use=='External') { $pageData->external=$obj->$countCol; }
-		elseif ($obj->project_use=='Collaborative') { $pageData->collaborative=$obj->$countCol; }
-	}
-}
-/* SAMPLES
-$result = mysql_query("SELECT COUNT(*) FROM News");
-$row = mysql_fetch_assoc($result);
-$size = $row['COUNT(*)'];
-	SELECT COUNT(CustomerID) AS tempTableName FROM Orders WHERE CustomerID=7;
-	$query = "SELECT type, COUNT(name) FROM products GROUP BY type"; 
-	$result = mysql_query($query) or die(mysql_error());
+//Loop through other stats
+$statTypes = array('project_use','admin_selection','infra_selection');
+foreach ($statTypes as $typeName) {
+	//getStats($value, $mysqli, $pageData);
+	$queryStats = 'SELECT '.$typeName.', COUNT('.$typeName.') FROM project_main GROUP BY '.$typeName.' LIMIT 0,10;';
+	$resultStats = $mysqli->query($queryStats);
 	
-	// Print out result
-	while($row = mysql_fetch_array($result)){
-		echo "There are ". $row['COUNT(name)'] ." ". $row['type'] ." items.";
-		echo "<br />";
+	if ($resultStats!=false) {  
+		while ($obj = $resultStats->fetch_object()) {
+			$temp = $obj->$typeName;
+			$temp = preg_replace('/\s+/', '',$temp);
+			$countCol = 'COUNT('.$typeName.')';
+			$pageData->$temp = $obj->$countCol;
+		}
+		$$typeName = $resultStats->num_rows;
+		if (isset($admin_selection)) { 
+			$pageData->OtherAdmin = $pageData->UnderReview + $pageData->Approved + $pageData->Retired - $admin_selection; 
+			if ($pageData->OtherAdmin < 0) { $pageData->OtherAdmin = 0; }
+		}
+		if (isset($infra_selection)) { 
+			$pageData->OtherTech = $pageData->ToSetUp + $pageData->Ready + $pageData->ToTakeDown - $infra_selection;
+			if ($pageData->OtherTech < 0) { $pageData->OtherTech = 0; }
+		}
 	}
-*/
+	else {
+	    //error_log('Error in admin/index: the db query failed: query the db for stats/summary \n', 3, "/xampp/tmp/my-errors.log");
+		echo 'Error in admin/index: the db query failed: query the db for stats/summary';
+	}
+	// totals above minus total active
+}
 
-
-// query the db for the records. NEED TO ADD EXCLUSIONS WHEN SEARCHING
-$queryData = 'SELECT id,project_title,approved_start,approved_end,project_use,admin_selection,infra_selection,totalVM,totalPhysical,totalOnline,totalOther FROM project_main ORDER BY '.$orderBy.' '.$orderType.' LIMIT 0,1000;';
+// query the db for the engagement records. NEED TO ADD EXCLUSIONS WHEN SEARCHING
+//$queryData = 'SELECT id,project_title,approved_start,approved_end,project_use,admin_selection,infra_selection,totalVM,totalPhysical,totalOnline,totalOther FROM project_main ORDER BY '.$formVars->orderBy.' '.$formVars->orderType.' LIMIT 0,1000';
+//echo '$formVars->orderBy: '.$formVars->orderBy. '<br />';
+//echo '$formVars->orderType: '.$formVars->orderType. '<br />';
+$queryData = 'SELECT project_main.id,project_main.project_title,project_main.approved_start,project_main.approved_end,project_main.project_use,project_main.admin_selection,project_main.infra_selection,project_main.totalVM,project_main.totalPhysical,project_main.totalOnline,project_main.totalOther, personnel.first_name,personnel.last_name,personnel.organization FROM project_main JOIN personnel ON project_main.id=personnel.projectid WHERE personnel.primary_contact="1" ORDER BY '.$formVars->orderBy.' '.$formVars->orderType.' LIMIT 0,1000;';
 $resultData = $mysqli->query($queryData);
 if ($resultData==false) {  
-    error_log('Error in admin/index: the db query failed: query the db for the records \n', 3, "/tmp/my-errors.log");
+    //error_log('Error in admin/index: the db query failed: query the db for the records \n', 3, "/tmp/my-errors.log");
+	echo 'Error in admin/index: the db query failed: query the db for the records';
 }
 
-// query the db for the primary contact info
-// I need to pull the primary's record data from table personnel
-// pull rest of data separate based on obj->id, or use a join to pull all at once? 
-// should I loop through the queryData to get all the ids?
-// JOIN [users on project.userid = users.id] ?
-// table personnel, field primary_contact == 'y'
 
 
 /* pagination */
-$pages = new pages;
-$pages->pagination($resultData, $pageData);
-$pages->pageLinks($pageData);
+$pagination = new pagination;
+$pagination->numPerPage = $pageData->numPerPage;
+$pagination->calculations($resultData, $pageData);
+$pagination->pageLinks($pageData);
 
 
 /* get html template */
-
 require('../templates/admin-template.php');
 
 

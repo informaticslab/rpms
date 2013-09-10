@@ -30,44 +30,44 @@
 		
 		<div>Total Page<?php 
 			//add s for multiple
-			if ($pageData->pagesTotal > 1) { echo 's'; }
-			echo ': '.$pageData->pagesTotal.' &nbsp; ';
+			if ($pagination->pagesTotal > 1) { echo 's'; }
+			echo ': '.$pagination->pagesTotal.' &nbsp; ';
 			// unavailable pagination is not linked
-			if ($pageData->previousLink!='') { echo '<a href="'.$pageData->previousLink.'">Previous</a> | '; }
+			if ($pagination->previousLink!='') { echo '<a href="'.$pagination->previousLink.'">Previous</a> | '; }
 			else echo '<span class="disabled">Previous</span> | ';
-			echo $pageData->resultsPageNum.' | ';
-			if ($pageData->nextLink!='') { echo '<a href="'.$pageData->nextLink.'">Next</a>'; }
+			echo $pagination->resultsPageNum.' | ';
+			if ($pagination->nextLink!='') { echo '<a href="'.$pagination->nextLink.'">Next</a>'; }
 			else echo '<span class="disabled">Next</span>';
 			?>
 		</div>
 		
 		<div class="summary">
 			<ul>
-				<li>Total Projects:&nbsp;<?php echo $pageData->resultTotal; ?></li>
+				<li>Total Projects:&nbsp;<?php echo $resultData->resultTotal; ?></li>
 				<li>Active Projects:&nbsp;<?php echo $pageData->active; ?></li>
 			</ul>
 			
 			<h2>Engagement Types</h2>
 			<ul>
-				<li>Internal:&nbsp;<?php echo $pageData->internal; ?></li>
-				<li>External:&nbsp;<?php echo $pageData->external; ?></li>
-				<li>Collaborative:&nbsp;<?php echo $pageData->collaborative; ?></li>
+				<li>Internal:&nbsp;<?php echo $pageData->Internal; ?></li>
+				<li>External:&nbsp;<?php echo $pageData->External; ?></li>
+				<li>Collaborative:&nbsp;<?php echo $pageData->Collaborative; ?></li>
 			</ul>
 			
 			<h2>Administration Status</h2>
 			<ul>
-				<li>Under Review:&nbsp;<?php echo $pageData->underReview; ?></li>
-				<li>Approved:&nbsp;<?php echo $pageData->approved; ?></li>
-				<li>Discontinued:&nbsp;<?php echo $pageData->retired; ?></li>
-				<li>Other:&nbsp;<?php echo $pageData->otherAdmin; ?></li>
+				<li>Under Review:&nbsp;<?php echo $pageData->UnderReview; ?></li>
+				<li>Approved:&nbsp;<?php echo $pageData->Approved; ?></li>
+				<li>Discontinued:&nbsp;<?php echo $pageData->Retired; ?></li>
+				<li>Other:&nbsp;<?php echo $pageData->OtherAdmin; ?></li>
 			</ul>
 			
 			<h2>Infrastructure Status</h2>
 			<ul>
-				<li>To Set Up:&nbsp;<?php echo $pageData->toSetUp; ?></li>
-				<li>Ready:&nbsp;<?php echo $pageData->ready; ?></li>
-				<li>To&nbsp;Take&nbsp;Down:&nbsp;<?php echo $pageData->toTakeDown; ?></li>
-				<li>Other:&nbsp;<?php echo $pageData->otherTech; ?></li>
+				<li>To Set Up:&nbsp;<?php echo $pageData->ToSetUp; ?></li>
+				<li>Ready:&nbsp;<?php echo $pageData->Ready; ?></li>
+				<li>To&nbsp;Take&nbsp;Down:&nbsp;<?php echo $pageData->ToTakeDown; ?></li>
+				<li>Other:&nbsp;<?php echo $pageData->OtherTech; ?></li>
 			</ul>
 		</div>
 		
@@ -118,22 +118,22 @@
 	<table>
 	
 		<tr>
-			<th><a href="index.php?orderBy=id&orderType=<?php echo '$oid'; ?>">ID</a></th>
-			<th><a href="index.php?orderBy=start_date">Start&nbsp;Date</a></th>
-			<th colspan="4"><a href="index.php?orderBy=project_title">Title</a></th>
-			<th><a href="index.php?orderBy=project_use">Engagement</a></th>
-			<th><a href="index.php?orderBy=admin_selection">Admin&nbsp;Status</a></th>
+			<th><a href="index.php?orderBy=id&orderType=<?php echo $order->id; ?>">ID</a></th>
+			<th><a href="index.php?orderBy=approved_start&orderType=<?php echo $order->approved_start; ?>">Start&nbsp;Date</a></th>
+			<th colspan="4"><a href="index.php?orderBy=project_title&orderType=<?php echo $order->project_title; ?>">Title</a></th>
+			<th><a href="index.php?orderBy=project_use&orderType=<?php echo $order->project_use; ?>">Engagement</a></th>
+			<th><a href="index.php?orderBy=admin_selection&orderType=<?php echo $order->admin_selection; ?>">Admin&nbsp;Status</a></th>
 			<th><a href="#" data-click="add jquery action to check all boxes">Check&nbsp;All</a></th>
 		</tr>
 		<tr>
-			<th><a href="index.php?orderBy=organization">Organization</a></th>
-			<th><a href="index.php?orderBy=end_date">End&nbsp;Date</a></th>
-			<th>VM</th>
-			<th>Physical</th>
-			<th>Online</th>
-			<th>Other</th>
-			<th>Primary&nbsp;Contact</th>
-			<th><a href="index.php?orderBy=infra_selection">Infrastructure</a></th>
+			<th><a href="index.php?orderBy=organizatio&orderType=<?php echo $order->organization; ?>">Organization</a></th>
+			<th><a href="index.php?orderBy=approved_end&orderType=<?php echo $order->approved_end; ?>">End&nbsp;Date</a></th>
+			<th><a href="index.php?orderBy=">VM</th>
+			<th><a href="index.php?orderBy=">Physical</th>
+			<th><a href="index.php?orderBy=">Online</th>
+			<th><a href="index.php?orderBy=">Other</th>
+			<th><a href="index.php?orderBy=">Primary&nbsp;Contact</th>
+			<th><a href="index.php?orderBy=infra_selection&orderType=<?php echo $order->infra_selection; ?>">Infrastructure</a></th>
 			<th>&nbsp;</th>
 		</tr>
 
@@ -149,10 +149,6 @@ while ($rownum <= $limithigh AND $row = mysql_fetch_array($result)) {
 if ( $resultData != false ) {
 	$firstTime = 1;
 	while ( $obj = $resultData->fetch_object() ) { 
-// pull these from personnel, this id, primary
-$obj->first_name = 'John';
-$obj->last_name = 'Smith';
-$obj->organization = '';
 	?>
 		<tr><td colspan="9"><hr<?php if ($firstTime==1) { ?> class="red"<?php ; $firstTime++; } ?>></td></tr>
 		<tr>
