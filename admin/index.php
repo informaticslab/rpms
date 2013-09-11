@@ -11,8 +11,8 @@ Table of contents
 	pagination
 	get html template
 */
-/* insert some test data into the db
-INSERT INTO `project_main` (id,start_date,end_date,project_title,project_use,admin_selection,infra_selection) VALUES (23,'2010-08-10','2010-10-15','Health Statistics Web Presentation System (IBIS) Health Statistics Web Presentation','Internal','Approved','Ready');
+/* insert some test data into the db: 23 56 68
+INSERT INTO `project_main` (id,approved_start,approved_end,project_title,project_use,admin_selection,infra_selection) VALUES (23,'2010-08-10','2010-10-15','Health Statistics Web Presentation System (IBIS) Health Statistics Web Presentation','Internal','Approved','Ready');
 INSERT INTO `personnel` (projectid,first_name,last_name,organization,primary_contact) VALUES (60,'David','McNalley','CGH / CDC',1);
 */
 
@@ -30,17 +30,20 @@ $orderBy = 'approved_start';
 // this can only be 'ASC' or 'DESC'
 $orderType = 'DESC';
 
-// Default orderType for each sort field/column. NEED THIS TO FLIP WHEN LINK CHECKED SECOND TIME. maybe have it switch the data after it makes the db call.
-$order->id = 'ASC';
+// Default orderType for each sort field/column.
+$order->id = 'DESC';
 $order->approved_start = 'DESC';
+$order->approved_end = 'DESC';
 $order->project_title = 'ASC';
 $order->project_use = 'ASC';
 $order->admin_selection = 'ASC';
-$order->organization = 'ASC';
-$order->approved_end = 'DESC';
 $order->infra_selection = 'ASC';
-
-
+$order->totalVM = 'DESC';
+$order->totalPhysical = 'DESC';
+$order->totalOnline = 'DESC';
+$order->totalOther = 'DESC';
+$order->last_name = 'ASC';
+$order->organization = 'ASC';
 
 
 /*** change below for functionality ***/
@@ -52,7 +55,6 @@ $formVars->orderBy = $orderBy;
 $formVars->orderType = $orderType;
 $formVars->sanitizeForm($formVars);
 
-// http://localhost/rpms2/admin/index.php?orderBy=id&orderType=ASC
 
 
 /* query the db */
@@ -90,7 +92,7 @@ foreach ($statTypes as $typeName) {
 	}
 	else {
 	    //error_log('Error in admin/index: the db query failed: query the db for stats/summary \n', 3, "/xampp/tmp/my-errors.log");
-		echo 'Error in admin/index: the db query failed: query the db for stats/summary';
+		echo 'Error in admin/index: the db query failed: query the db for stats/summary <br />';
 	}
 	// totals above minus total active
 }
@@ -101,18 +103,29 @@ foreach ($statTypes as $typeName) {
 //echo '$formVars->orderType: '.$formVars->orderType. '<br />';
 $queryData = 'SELECT project_main.id,project_main.project_title,project_main.approved_start,project_main.approved_end,project_main.project_use,project_main.admin_selection,project_main.infra_selection,project_main.totalVM,project_main.totalPhysical,project_main.totalOnline,project_main.totalOther, personnel.first_name,personnel.last_name,personnel.organization FROM project_main JOIN personnel ON project_main.id=personnel.projectid WHERE personnel.primary_contact="1" ORDER BY '.$formVars->orderBy.' '.$formVars->orderType.' LIMIT 0,1000;';
 $resultData = $mysqli->query($queryData);
-if ($resultData==false) {  
-    //error_log('Error in admin/index: the db query failed: query the db for the records \n', 3, "/tmp/my-errors.log");
-	echo 'Error in admin/index: the db query failed: query the db for the records';
-}
-
 
 
 /* pagination */
 $pagination = new pagination;
-$pagination->numPerPage = $pageData->numPerPage;
-$pagination->calculations($resultData, $pageData);
-$pagination->pageLinks($pageData);
+if ($resultData!=false) {  
+	$pagination->numPerPage = $pageData->numPerPage;
+	$pagination->calculations($resultData);
+	$pagination->pageLinks($pageData);
+	
+	// revert column order on next click by changing link
+	if ($formVars->orderType != '') {
+		$temp = $formVars->orderBy;
+		if ($formVars->orderType == 'ASC') { 
+			$order->$temp='DESC'; 
+		}
+		else { $order->$temp='ASC'; }
+	}
+}
+else {  
+    //error_log('Error in admin/index: the db query failed: query the db for the records \n', 3, "/tmp/my-errors.log");
+	echo 'Error in admin/index: the db query failed: query the db for the records <br />';
+}
+
 
 
 /* get html template */

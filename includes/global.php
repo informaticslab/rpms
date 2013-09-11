@@ -101,13 +101,14 @@ class pagination {
 		$resultsPageNum = '',
 		$pagesTotal = '',
 		$previousLink = '',
-		$nextLink = ''
+		$nextLink = '',
+		$resultTotal = '0'
 	;
 	function calculations($resultData) {
 		// Create page numbers
-		$resultData->resultTotal = $resultData->num_rows;
+		$this->resultTotal = $resultData->num_rows;
 		//$obj = $resultData->fetch_object();
-		$this->pagesTotal = ceil($resultData->resultTotal / $this->numPerPage);
+		$this->pagesTotal = ceil($this->resultTotal / $this->numPerPage);
 		
 		// get this page
 		if (isset($page)) { $this->resultsPageNum = $this->page; }

@@ -43,7 +43,7 @@
 		
 		<div class="summary">
 			<ul>
-				<li>Total Projects:&nbsp;<?php echo $resultData->resultTotal; ?></li>
+				<li>Total Projects:&nbsp;<?php echo $pagination->resultTotal; ?></li>
 				<li>Active Projects:&nbsp;<?php echo $pageData->active; ?></li>
 			</ul>
 			
@@ -126,13 +126,13 @@
 			<th><a href="#" data-click="add jquery action to check all boxes">Check&nbsp;All</a></th>
 		</tr>
 		<tr>
-			<th><a href="index.php?orderBy=organizatio&orderType=<?php echo $order->organization; ?>">Organization</a></th>
+			<th><a href="index.php?orderBy=organization&orderType=<?php echo $order->organization; ?>">Organization</a></th>
 			<th><a href="index.php?orderBy=approved_end&orderType=<?php echo $order->approved_end; ?>">End&nbsp;Date</a></th>
-			<th><a href="index.php?orderBy=">VM</th>
-			<th><a href="index.php?orderBy=">Physical</th>
-			<th><a href="index.php?orderBy=">Online</th>
-			<th><a href="index.php?orderBy=">Other</th>
-			<th><a href="index.php?orderBy=">Primary&nbsp;Contact</th>
+			<th><a href="index.php?orderBy=totalVM&orderType=<?php echo $order->totalVM; ?>">VM</th>
+			<th><a href="index.php?orderBy=totalPhysical&orderType=<?php echo $order->totalPhysical; ?>">Physical</th>
+			<th><a href="index.php?orderBy=totalOnline&orderType=<?php echo $order->totalOnline; ?>">Online</th>
+			<th><a href="index.php?orderBy=totalOther&orderType=<?php echo $order->totalOther; ?>">Other</th>
+			<th><a href="index.php?orderBy=last_name&orderType=<?php echo $order->last_name;?>">Primary&nbsp;Contact</th>
 			<th><a href="index.php?orderBy=infra_selection&orderType=<?php echo $order->infra_selection; ?>">Infrastructure</a></th>
 			<th>&nbsp;</th>
 		</tr>

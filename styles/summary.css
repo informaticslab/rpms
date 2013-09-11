@@ -109,7 +109,7 @@ h2 { font-size:12px; }
 .data tr:nth-child(even) th, .data tr:nth-child(even) td { padding:0px 10px 10px 10px; }*/
 
 
-.data tr:nth-child(1) th:nth-child(1) { width:110px; }
+/*.data tr:nth-child(1) th:nth-child(1) { width:110px; } */
 .data tr:nth-child(1) th:nth-child(2) { width:100px; }
 .data tr:nth-child(1) th:nth-child(3) { width:auto; }
 .data tr:nth-child(1) th:nth-child(4) { width:107px; }
