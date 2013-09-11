@@ -100,28 +100,30 @@ class pagination {
 		$page = '',
 		$resultsPageNum = '',
 		$pagesTotal = '',
+		$limitlow = '',
+		$limithigh = '',
 		$previousLink = '',
 		$nextLink = '',
 		$resultTotal = '0'
 	;
-	function calculations($resultData) {
+	function calculations($resultData, $formVars) {
 		// Create page numbers
 		$this->resultTotal = $resultData->num_rows;
 		//$obj = $resultData->fetch_object();
 		$this->pagesTotal = ceil($this->resultTotal / $this->numPerPage);
 		
 		// get this page
-		if (isset($page)) { $this->resultsPageNum = $this->page; }
+		if (isset($formVars->page)) { $this->resultsPageNum = $formVars->page; }
 		else { $this->resultsPageNum = 1; }
 		
 		// set the limit of what will be displayed
-		$limitlow = ($this->resultsPageNum - 1) * $this->numPerPage;
-		$limithigh = ($this->resultsPageNum * $this->numPerPage) - 1;
+		$this->limitlow = ($this->resultsPageNum - 1) * $this->numPerPage;
+		$this->limithigh = ($this->resultsPageNum * $this->numPerPage) - 1;
 		
 		// find the first row to display for this page
-		$resultData->data_seek($limitlow);
+		$resultData->data_seek($this->limitlow);
 	}
-	function pageLinks($pageData) {
+	function pageLinks($pageData, $formVars) {
 		// make pagination links
 		$resultsPrevious = $this->resultsPageNum-1;
 		$resultsNext = $this->resultsPageNum+1;
@@ -129,14 +131,15 @@ class pagination {
 		else $pS = '';
 		if (isset($field)) { $pF = 'field='.$field.'&'; }
 		else $pF = '';
-		
+		$tempOrder = 'orderBy='.$formVars->orderBy.'&orderType='.$formVars->orderType.'&';
+
 		// if page doesn't exist, leave link blank
 		if ($resultsPrevious > 0) {
-			$this->previousLink = $pageData->pageName.'?'.$pS.$pF.'orderBy='.$orderBy.'&orderType='.$orderType.'&page='.$resultsPrevious;
+			$this->previousLink = $pageData->pageName.'?'.$pS.$pF.$tempOrder.'page='.$resultsPrevious;
 		}
 		else { $pageData->previousLink = ''; }
 		if ($resultsNext <= $this->pagesTotal) {
-			$this->nextLink = $pageData->pageName.'?'.$pS.$pF.'orderBy='.$orderBy.'&orderType='.$orderType.'&page='.$resultsNext;
+			$this->nextLink = $pageData->pageName.'?'.$pS.$pF.$tempOrder.'page='.$resultsNext;
 		}
 		else $pageData->nextLink = '';
 	}

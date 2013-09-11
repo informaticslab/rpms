@@ -138,17 +138,11 @@
 		</tr>
 
 <?php // start looping through the records 
-/*
-// ADD TO TEMPLATE $resultData /= $rownum ?
-// display the records within limits
-while ($rownum <= $limithigh AND $row = mysql_fetch_array($result)) {
-	$rownum++;
-}
-*/
 
 if ( $resultData != false ) {
 	$firstTime = 1;
-	while ( $obj = $resultData->fetch_object() ) { 
+	while ( $obj=$resultData->fetch_object() AND $pagination->limitlow<=$pagination->limithigh ) {
+		$pagination->limitlow++
 	?>
 		<tr><td colspan="9"><hr<?php if ($firstTime==1) { ?> class="red"<?php ; $firstTime++; } ?>></td></tr>
 		<tr>

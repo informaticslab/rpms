@@ -20,13 +20,13 @@ INSERT INTO `personnel` (projectid,first_name,last_name,organization,primary_con
 require('../includes/global.php');
 
 /* Change these for personalization */
-$pageData->title = 'RPMS Administration Summary';
+$pageData->title = 'RPMS Administration Summary - Informatics Research & Development Activity';
 $pageData->navSelected = 'Administration';
 $pageData->pageName = 'index.php';
-$pageData->numPerPage = '1000';
+$pageData->numPerPage = '8';
 
 // default summary engagement order
-$orderBy = 'approved_start';
+$orderBy = 'id';
 // this can only be 'ASC' or 'DESC'
 $orderType = 'DESC';
 
@@ -61,19 +61,19 @@ $formVars->sanitizeForm($formVars);
 
 // query the db for stats/summary. NEED TO ADD EXCLUSIONS WHEN SEARCHING
 $queryStats = 'SELECT COUNT(admin_selection) FROM project_main WHERE admin_selection!="Closed" LIMIT 0,10;';
-$resultStats = $mysqli->query($queryStats);
-$obj = $resultStats->fetch_object();
-$countCol = 'COUNT(admin_selection)';
-$pageData->active=$obj->$countCol;
+if ($resultStats = $mysqli->query($queryStats)) {
+	$obj = $resultStats->fetch_object();
+	$countCol = 'COUNT(admin_selection)';
+	$pageData->active = $obj->$countCol;
+}
+
 
 //Loop through other stats
 $statTypes = array('project_use','admin_selection','infra_selection');
 foreach ($statTypes as $typeName) {
 	//getStats($value, $mysqli, $pageData);
 	$queryStats = 'SELECT '.$typeName.', COUNT('.$typeName.') FROM project_main GROUP BY '.$typeName.' LIMIT 0,10;';
-	$resultStats = $mysqli->query($queryStats);
-	
-	if ($resultStats!=false) {  
+	if ($resultStats = $mysqli->query($queryStats)) {  
 		while ($obj = $resultStats->fetch_object()) {
 			$temp = $obj->$typeName;
 			$temp = preg_replace('/\s+/', '',$temp);
@@ -98,20 +98,15 @@ foreach ($statTypes as $typeName) {
 }
 
 // query the db for the engagement records. NEED TO ADD EXCLUSIONS WHEN SEARCHING
-//$queryData = 'SELECT id,project_title,approved_start,approved_end,project_use,admin_selection,infra_selection,totalVM,totalPhysical,totalOnline,totalOther FROM project_main ORDER BY '.$formVars->orderBy.' '.$formVars->orderType.' LIMIT 0,1000';
-//echo '$formVars->orderBy: '.$formVars->orderBy. '<br />';
-//echo '$formVars->orderType: '.$formVars->orderType. '<br />';
 $queryData = 'SELECT project_main.id,project_main.project_title,project_main.approved_start,project_main.approved_end,project_main.project_use,project_main.admin_selection,project_main.infra_selection,project_main.totalVM,project_main.totalPhysical,project_main.totalOnline,project_main.totalOther, personnel.first_name,personnel.last_name,personnel.organization FROM project_main JOIN personnel ON project_main.id=personnel.projectid WHERE personnel.primary_contact="1" ORDER BY '.$formVars->orderBy.' '.$formVars->orderType.' LIMIT 0,1000;';
-$resultData = $mysqli->query($queryData);
-
 
 /* pagination */
 $pagination = new pagination;
-if ($resultData!=false) {  
+if ($resultData = $mysqli->query($queryData)) {  
 	$pagination->numPerPage = $pageData->numPerPage;
-	$pagination->calculations($resultData);
-	$pagination->pageLinks($pageData);
-	
+	$pagination->calculations($resultData, $formVars);
+	$pagination->pageLinks($pageData, $formVars);
+
 	// revert column order on next click by changing link
 	if ($formVars->orderType != '') {
 		$temp = $formVars->orderBy;
@@ -128,8 +123,11 @@ else {
 
 
 
-/* get html template */
-require('../templates/admin-template.php');
+/* get html template: print or regular */
+if (isset($formVars->print) && $formVars->print=='1') {
+	require('../templates/admin-template-print.php');
+}
+else { require('../templates/admin-template.php'); }
 
 
 // close db connection
