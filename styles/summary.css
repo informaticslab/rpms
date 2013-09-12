@@ -64,7 +64,7 @@ h2 { font-size:12px; }
 
 .leftnav menu { margin-bottom:20px; }
 .leftnav nav { margin:10px 0px; text-align:center; width:98%; }
-.leftnav nav span, .leftnav nav a, .leftnav menu a { padding:0px 6px; border-left:1px solid #000; }
+.leftnav nav span, .leftnav nav a, .leftnav menu span, .leftnav menu a { padding:0px 6px; border-left:1px solid #000; }
 .leftnav nav :first-child, .leftnav menu :first-child { border:none; }
 
 

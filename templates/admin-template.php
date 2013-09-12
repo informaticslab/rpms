@@ -74,7 +74,8 @@
 		<menu>
 		<?php // menu html in a php loop
 		foreach ($menu as $value) {
-			echo '<a href="'.$value[1].'">'.$value[0].'</a>';
+			//echo '<a href="'.$value[1].'">'.$value[0].'</a>';
+			echo '<span class="disabled">'.$value[0].'</span>';
 		}
 		?>
 		Checked Engagements
@@ -107,7 +108,8 @@
 				echo '<span>'.$value[0].'</span>'; 
 			} 
 			else { 
-				echo '<a href="'.$value[1].'">'.$value[0].'</a>';
+				// echo '<a href="'.$value[1].'">'.$value[0].'</a>';
+				echo '<span class="disabled">'.$value[0].'</span>';
 			}
 		}
 		?>
@@ -123,15 +125,16 @@
 			<th colspan="4"><a href="index.php?orderBy=project_title&orderType=<?php echo $order->project_title; ?>">Title</a></th>
 			<th><a href="index.php?orderBy=project_use&orderType=<?php echo $order->project_use; ?>">Engagement</a></th>
 			<th><a href="index.php?orderBy=admin_selection&orderType=<?php echo $order->admin_selection; ?>">Admin&nbsp;Status</a></th>
-			<th><a href="#" data-click="add jquery action to check all boxes">Check&nbsp;All</a></th>
+			<!-- <th><a href="#" data-click="add jquery action to check all boxes">Check&nbsp;All</a></th> -->
+			<th><span class="disabled">Check&nbsp;All</span></th>
 		</tr>
 		<tr>
 			<th><a href="index.php?orderBy=organization&orderType=<?php echo $order->organization; ?>">Organization</a></th>
 			<th><a href="index.php?orderBy=approved_end&orderType=<?php echo $order->approved_end; ?>">End&nbsp;Date</a></th>
-			<th><a href="index.php?orderBy=totalVM&orderType=<?php echo $order->totalVM; ?>">VM</th>
-			<th><a href="index.php?orderBy=totalPhysical&orderType=<?php echo $order->totalPhysical; ?>">Physical</th>
-			<th><a href="index.php?orderBy=totalOnline&orderType=<?php echo $order->totalOnline; ?>">Online</th>
-			<th><a href="index.php?orderBy=totalOther&orderType=<?php echo $order->totalOther; ?>">Other</th>
+			<th><a href="index.php?orderBy=total_VM&orderType=<?php echo $order->total_VM; ?>">VM</th>
+			<th><a href="index.php?orderBy=total_physical&orderType=<?php echo $order->total_physical; ?>">Physical</th>
+			<th><a href="index.php?orderBy=total_online&orderType=<?php echo $order->total_online; ?>">Online</th>
+			<th><a href="index.php?orderBy=total_other&orderType=<?php echo $order->total_other; ?>">Other</th>
 			<th><a href="index.php?orderBy=last_name&orderType=<?php echo $order->last_name;?>">Primary&nbsp;Contact</th>
 			<th><a href="index.php?orderBy=infra_selection&orderType=<?php echo $order->infra_selection; ?>">Infrastructure</a></th>
 			<th>&nbsp;</th>
@@ -156,10 +159,10 @@ if ( $resultData != false ) {
 		<tr>
 			<td><?php echo $obj->organization; ?></td>
 			<td><?php echo $obj->approved_end; ?></td>
-			<td><?php echo $obj->totalVM; ?></td>
-			<td><?php echo $obj->totalPhysical; ?></td>
-			<td><?php echo $obj->totalOnline; ?></td>
-			<td><?php echo $obj->totalOther; ?></td>
+			<td><?php echo $obj->total_VM; ?></td>
+			<td><?php echo $obj->total_physical; ?></td>
+			<td><?php echo $obj->total_online; ?></td>
+			<td><?php echo $obj->total_other; ?></td>
 			<td><?php echo $obj->first_name.' '.$obj->last_name; ?></td>
 			<td><?php echo $obj->infra_selection; ?></td>
 			<td>&nbsp;</td>

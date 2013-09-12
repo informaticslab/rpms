@@ -25,10 +25,25 @@ USE `rpms`;
 -- --------------------------------------------------------
 
 --
--- Table structure for table `personnel`
+-- Drop all tables first to prevent foreign key errors, then add them back
 --
 
 DROP TABLE IF EXISTS `personnel`;
+DROP TABLE IF EXISTS `project_date_history`;
+DROP TABLE IF EXISTS `resources`;
+DROP TABLE IF EXISTS `stakeholders`;
+DROP TABLE IF EXISTS `resources_history`;
+DROP TABLE IF EXISTS `status_history`;
+
+DROP TABLE IF EXISTS `project_main`;
+
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `personnel`
+--
+
 CREATE TABLE IF NOT EXISTS `personnel` (
   `id` tinyint(5) NOT NULL AUTO_INCREMENT,
   `projectid` tinyint(5) NOT NULL,
@@ -52,7 +67,6 @@ CREATE TABLE IF NOT EXISTS `personnel` (
 -- Table structure for table `project_main`
 --
 
-DROP TABLE IF EXISTS `project_main`;
 CREATE TABLE IF NOT EXISTS `project_main` (
   `id` tinyint(5) NOT NULL,
   `project_created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -96,7 +110,6 @@ CREATE TABLE IF NOT EXISTS `project_main` (
 -- Table structure for table `project_date_history`
 --
 
-DROP TABLE IF EXISTS `project_date_history`;
 CREATE TABLE IF NOT EXISTS `project_date_history` (
   `id` tinyint(5) NOT NULL AUTO_INCREMENT,
   `projectid` tinyint(5) NOT NULL,
@@ -113,7 +126,6 @@ CREATE TABLE IF NOT EXISTS `project_date_history` (
 -- Table structure for table `resources`
 --
 
-DROP TABLE IF EXISTS `resources`;
 CREATE TABLE IF NOT EXISTS `resources` (
   `id` tinyint(5) NOT NULL AUTO_INCREMENT,
   `projectid` tinyint(5) NOT NULL,
@@ -144,7 +156,6 @@ CREATE TABLE IF NOT EXISTS `resources` (
 -- Table structure for table `resources_history`
 --
 
-DROP TABLE IF EXISTS `resources_history`;
 CREATE TABLE IF NOT EXISTS `resources_history` (
   `id` tinyint(5) NOT NULL AUTO_INCREMENT,
   `changed_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -176,7 +187,6 @@ CREATE TABLE IF NOT EXISTS `resources_history` (
 -- Table structure for table `stakeholders`
 --
 
-DROP TABLE IF EXISTS `stakeholders`;
 CREATE TABLE IF NOT EXISTS `stakeholders` (
   `id` tinyint(5) NOT NULL AUTO_INCREMENT,
   `projectid` tinyint(5) NOT NULL,
@@ -192,7 +202,6 @@ CREATE TABLE IF NOT EXISTS `stakeholders` (
 -- Table structure for table `status_history`
 --
 
-DROP TABLE IF EXISTS `status_history`;
 CREATE TABLE IF NOT EXISTS `status_history` (
   `id` tinyint(5) NOT NULL AUTO_INCREMENT,
   `projectid` tinyint(5) NOT NULL,

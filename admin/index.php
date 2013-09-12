@@ -23,7 +23,7 @@ require('../includes/global.php');
 $pageData->title = 'RPMS Administration Summary - Informatics Research & Development Activity';
 $pageData->navSelected = 'Administration';
 $pageData->pageName = 'index.php';
-$pageData->numPerPage = '8';
+$pageData->numPerPage = '2'; // 8
 
 // default summary engagement order
 $orderBy = 'id';
@@ -38,10 +38,10 @@ $order->project_title = 'ASC';
 $order->project_use = 'ASC';
 $order->admin_selection = 'ASC';
 $order->infra_selection = 'ASC';
-$order->totalVM = 'DESC';
-$order->totalPhysical = 'DESC';
-$order->totalOnline = 'DESC';
-$order->totalOther = 'DESC';
+$order->total_VM = 'DESC';
+$order->total_physical = 'DESC';
+$order->total_online = 'DESC';
+$order->total_other = 'DESC';
 $order->last_name = 'ASC';
 $order->organization = 'ASC';
 
@@ -98,7 +98,7 @@ foreach ($statTypes as $typeName) {
 }
 
 // query the db for the engagement records. NEED TO ADD EXCLUSIONS WHEN SEARCHING
-$queryData = 'SELECT project_main.id,project_main.project_title,project_main.approved_start,project_main.approved_end,project_main.project_use,project_main.admin_selection,project_main.infra_selection,project_main.totalVM,project_main.totalPhysical,project_main.totalOnline,project_main.totalOther, personnel.first_name,personnel.last_name,personnel.organization FROM project_main JOIN personnel ON project_main.id=personnel.projectid WHERE personnel.primary_contact="1" ORDER BY '.$formVars->orderBy.' '.$formVars->orderType.' LIMIT 0,1000;';
+$queryData = 'SELECT project_main.id,project_main.project_title,project_main.approved_start,project_main.approved_end,project_main.project_use,project_main.admin_selection,project_main.infra_selection,project_main.total_VM,project_main.total_physical,project_main.total_online,project_main.total_other, personnel.first_name,personnel.last_name,personnel.organization FROM project_main JOIN personnel ON project_main.id=personnel.projectid WHERE personnel.primary_contact="1" ORDER BY '.$formVars->orderBy.' '.$formVars->orderType.' LIMIT 0,1000;';
 
 /* pagination */
 $pagination = new pagination;
